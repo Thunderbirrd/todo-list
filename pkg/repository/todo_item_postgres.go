@@ -15,7 +15,7 @@ func NewToDoItemPostgres(db *sqlx.DB) *ToDoItemPostgres {
 	return &ToDoItemPostgres{db: db}
 }
 
-func (r *ToDoItemPostgres) Create(listId int, item todo.Item) (int, error) {
+func (r *ToDoItemPostgres) Create(listId int, item models.Item) (int, error) {
 	tx, err := r.db.Begin()
 	if err != nil {
 		return 0, err
@@ -40,8 +40,8 @@ func (r *ToDoItemPostgres) Create(listId int, item todo.Item) (int, error) {
 	return itemId, tx.Commit()
 }
 
-func (r *ToDoItemPostgres) GetAll(userId, listId int) ([]todo.Item, error) {
-	var items []todo.Item
+func (r *ToDoItemPostgres) GetAll(userId, listId int) ([]models.Item, error) {
+	var items []models.Item
 	query := fmt.Sprintf(`SELECT ti. id, ti.title, ti.description, ti.done  FROM %s ti INNER JOIN %s li on li.item_id = ti.id 
 								INNER JOIN %s ul on ul.list_id = li.list_id WHERE li.list_id = $1 AND ul.user_id = $2`,
 		todoItemsTable, listsItemsTable, usersListsTable)
@@ -53,8 +53,8 @@ func (r *ToDoItemPostgres) GetAll(userId, listId int) ([]todo.Item, error) {
 	return items, nil
 }
 
-func (r *ToDoItemPostgres) GetById(userId, itemId int) (todo.Item, error) {
-	var item todo.Item
+func (r *ToDoItemPostgres) GetById(userId, itemId int) (models.Item, error) {
+	var item models.Item
 	query := fmt.Sprintf(`SELECT ti. id, ti.title, ti.description, ti.done  FROM %s ti INNER JOIN %s li on li.item_id = ti.id 
 								INNER JOIN %s ul on ul.list_id = li.list_id WHERE ti.id = $1 AND ul.user_id = $2`,
 		todoItemsTable, listsItemsTable, usersListsTable)
@@ -74,7 +74,7 @@ func (r *ToDoItemPostgres) Delete(userId, itemId int) error {
 	return err
 }
 
-func (r *ToDoItemPostgres) Update(userid, itemId int, input todo.UpdateItemInput) error {
+func (r *ToDoItemPostgres) Update(userid, itemId int, input models.UpdateItemInput) error {
 	setValues := make([]string, 0)
 	args := make([]interface{}, 0)
 	argId := 1

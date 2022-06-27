@@ -7,6 +7,19 @@ import (
 	"strconv"
 )
 
+// @Summary Create list item
+// @Security ApiKeyAuth
+// @Tags items
+// @Description create new item in list
+// @ID create-item
+// @Accept  json
+// @Produce  json
+// @Param input body models.Item true "item info"
+// @Success 200 {integer} integer 1
+// @Failure 400,404 {object} errorResponse
+// @Failure 500 {object} errorResponse
+// @Failure default {object} errorResponse
+// @Router /api/lists/:id/items [post]
 func (h *Handler) createItem(c *gin.Context) {
 	userId, err := getUserId(c)
 	if err != nil {
@@ -19,7 +32,7 @@ func (h *Handler) createItem(c *gin.Context) {
 		return
 	}
 
-	var input todo.Item
+	var input models.Item
 	if err := c.BindJSON(&input); err != nil {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
@@ -36,6 +49,19 @@ func (h *Handler) createItem(c *gin.Context) {
 	})
 
 }
+
+// @Summary Get list's items
+// @Security ApiKeyAuth
+// @Tags items
+// @Description gets all list's items
+// @ID get-all-items
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} []models.Item true "items list"
+// @Failure 400,404 {object} errorResponse
+// @Failure 500 {object} errorResponse
+// @Failure default {object} errorResponse
+// @Router /api/lists/:id/items [get]
 func (h *Handler) getAllItems(c *gin.Context) {
 	userId, err := getUserId(c)
 	if err != nil {
@@ -57,6 +83,18 @@ func (h *Handler) getAllItems(c *gin.Context) {
 	c.JSON(http.StatusOK, items)
 }
 
+// @Summary Get item by id
+// @Security ApiKeyAuth
+// @Tags items
+// @Description get item by id
+// @ID get-item-by-id
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} models.ListItem true "item list"
+// @Failure 400,404 {object} errorResponse
+// @Failure 500 {object} errorResponse
+// @Failure default {object} errorResponse
+// @Router /api/items/:id [get]
 func (h *Handler) getItemById(c *gin.Context) {
 	userId, err := getUserId(c)
 	if err != nil {
@@ -78,6 +116,19 @@ func (h *Handler) getItemById(c *gin.Context) {
 	c.JSON(http.StatusOK, item)
 }
 
+// @Summary Update item
+// @Security ApiKeyAuth
+// @Tags items
+// @Description update existing item
+// @ID update-item
+// @Accept  json
+// @Produce  json
+// @Param input body models.UpdateItemInput true "updating info"
+// @Success 200 {string} string 1
+// @Failure 400,404 {object} errorResponse
+// @Failure 500 {object} errorResponse
+// @Failure default {object} errorResponse
+// @Router /api/items/:id [put]
 func (h *Handler) updateItem(c *gin.Context) {
 	userId, err := getUserId(c)
 	if err != nil {
@@ -89,7 +140,7 @@ func (h *Handler) updateItem(c *gin.Context) {
 		newErrorResponse(c, http.StatusBadRequest, "invalid id param")
 		return
 	}
-	var input todo.UpdateItemInput
+	var input models.UpdateItemInput
 	if err := c.BindJSON(&input); err != nil {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
@@ -105,6 +156,18 @@ func (h *Handler) updateItem(c *gin.Context) {
 	})
 }
 
+// @Summary Delete item by id
+// @Security ApiKeyAuth
+// @Tags items
+// @Description delete existing item by id
+// @ID delete-item
+// @Accept  json
+// @Produce  json
+// @Success 200 {string} string 1
+// @Failure 400,404 {object} errorResponse
+// @Failure 500 {object} errorResponse
+// @Failure default {object} errorResponse
+// @Router /api/items/:id [delete]
 func (h *Handler) deleteItem(c *gin.Context) {
 	userId, err := getUserId(c)
 	if err != nil {

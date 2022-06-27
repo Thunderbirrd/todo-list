@@ -6,24 +6,24 @@ import (
 )
 
 type Authorization interface {
-	CreateUser(user todo.User) (int, error)
-	GetUser(username, password string) (todo.User, error)
+	CreateUser(user models.User) (int, error)
+	GetUser(username, password string) (models.User, error)
 }
 
 type TodoList interface {
-	Create(userId int, list todo.List) (int, error)
-	GetAll(userId int) ([]todo.List, error)
-	GetById(userId, listId int) (todo.List, error)
+	Create(userId int, list models.List) (int, error)
+	GetAll(userId int) ([]models.List, error)
+	GetById(userId, listId int) (models.List, error)
 	Delete(userId, listId int) error
-	Update(userid, listId int, input todo.UpdateListInput) error
+	Update(userid, listId int, input models.UpdateListInput) error
 }
 
 type TodoItem interface {
-	Create(listId int, item todo.Item) (int, error)
-	GetAll(userId, listId int) ([]todo.Item, error)
-	GetById(userId, itemId int) (todo.Item, error)
+	Create(listId int, item models.Item) (int, error)
+	GetAll(userId, listId int) ([]models.Item, error)
+	GetById(userId, itemId int) (models.Item, error)
 	Delete(userId, itemId int) error
-	Update(userid, itemId int, input todo.UpdateItemInput) error
+	Update(userid, itemId int, input models.UpdateItemInput) error
 }
 
 type Repository struct {

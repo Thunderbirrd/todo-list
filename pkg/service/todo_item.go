@@ -14,7 +14,7 @@ func NewToDoItemService(repo repository.TodoItem, listRepo repository.TodoList) 
 	return &ToDoItemService{repo: repo, listRepo: listRepo}
 }
 
-func (s *ToDoItemService) Create(userId, listId int, item todo.Item) (int, error) {
+func (s *ToDoItemService) Create(userId, listId int, item models.Item) (int, error) {
 	_, err := s.listRepo.GetById(userId, listId)
 	if err != nil {
 		// list does not exists or does not belong to user
@@ -23,11 +23,11 @@ func (s *ToDoItemService) Create(userId, listId int, item todo.Item) (int, error
 	return s.repo.Create(listId, item)
 }
 
-func (s *ToDoItemService) GetAll(userId, listId int) ([]todo.Item, error) {
+func (s *ToDoItemService) GetAll(userId, listId int) ([]models.Item, error) {
 	return s.repo.GetAll(userId, listId)
 }
 
-func (s *ToDoItemService) GetById(userId, itemId int) (todo.Item, error) {
+func (s *ToDoItemService) GetById(userId, itemId int) (models.Item, error) {
 	return s.repo.GetById(userId, itemId)
 }
 
@@ -35,6 +35,6 @@ func (s *ToDoItemService) Delete(userId, itemId int) error {
 	return s.repo.Delete(userId, itemId)
 }
 
-func (s *ToDoItemService) Update(userid, itemId int, input todo.UpdateItemInput) error {
+func (s *ToDoItemService) Update(userid, itemId int, input models.UpdateItemInput) error {
 	return s.repo.Update(userid, itemId, input)
 }

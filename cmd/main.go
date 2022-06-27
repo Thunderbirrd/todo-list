@@ -15,9 +15,9 @@ import (
 	"syscall"
 )
 
-// @title Todo list API
-// @version 0.1
-// @description API for Todo list
+// @title TodoList API
+// @version 1.0
+// @description API for TodoList
 
 // @host localhost:8080
 // @BasePath /
@@ -48,7 +48,7 @@ func main() {
 	repos := repository.NewRepository(db)
 	services := service.NewService(repos)
 	handlers := handler.NewHandler(services)
-	srv := new(todo.Server)
+	srv := new(models.Server)
 
 	go func() {
 		if err := srv.Run(viper.GetString("port"), handlers.InitRoutes()); err != nil {

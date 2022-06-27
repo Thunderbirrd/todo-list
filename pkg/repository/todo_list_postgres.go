@@ -16,7 +16,7 @@ func NewTodoListPostgres(db *sqlx.DB) *TodoListPostgres {
 	return &TodoListPostgres{db: db}
 }
 
-func (r *TodoListPostgres) Create(userId int, list todo.List) (int, error) {
+func (r *TodoListPostgres) Create(userId int, list models.List) (int, error) {
 	tx, err := r.db.Begin()
 	if err != nil {
 		return 0, err
@@ -39,16 +39,16 @@ func (r *TodoListPostgres) Create(userId int, list todo.List) (int, error) {
 	return id, tx.Commit()
 }
 
-func (r *TodoListPostgres) GetAll(userId int) ([]todo.List, error) {
-	var lists []todo.List
+func (r *TodoListPostgres) GetAll(userId int) ([]models.List, error) {
+	var lists []models.List
 	query := fmt.Sprintf("SELECT tl.id, tl.title, tl.description FROM %s tl INNER JOIN %s ul on tl.id = ul.list_id WHERE ul.user_id = $1",
 		todoListsTable, usersListsTable)
 	err := r.db.Select(&lists, query, userId)
 	return lists, err
 }
 
-func (r *TodoListPostgres) GetById(userId, listId int) (todo.List, error) {
-	var list todo.List
+func (r *TodoListPostgres) GetById(userId, listId int) (models.List, error) {
+	var list models.List
 	query := fmt.Sprintf(`SELECT tl.id, tl.title, tl.description FROM %s tl 
 								INNER JOIN %s ul on tl.id = ul.list_id WHERE ul.user_id = $1 AND ul.list_id = $2`,
 		todoListsTable, usersListsTable)
@@ -64,7 +64,7 @@ func (r *TodoListPostgres) Delete(userId, listId int) error {
 	return err
 }
 
-func (r *TodoListPostgres) Update(userid, listId int, input todo.UpdateListInput) error {
+func (r *TodoListPostgres) Update(userid, listId int, input models.UpdateListInput) error {
 	setValues := make([]string, 0)
 	args := make([]interface{}, 0)
 	argId := 1
