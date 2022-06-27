@@ -1,2 +1,2 @@
-# todo-list
-TODO list with Golang
+# Go_TODO
+TODO list on Go
